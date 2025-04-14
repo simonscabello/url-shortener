@@ -10,6 +10,11 @@ import (
 )
 
 func main() {
+	fmt.Println("🔍 Variáveis de ambiente disponíveis:")
+	for _, e := range os.Environ() {
+		fmt.Println(e)
+	}
+
 	app := fiber.New()
 
 	redisURL := os.Getenv("REDIS_URL")
