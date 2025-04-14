@@ -1,7 +1,6 @@
 package main
 
 import (
-	"os"
 	"url-shortener/internal/handlers"
 	"url-shortener/internal/storage"
 
@@ -11,12 +10,14 @@ import (
 func main() {
 	app := fiber.New()
 
-	redisURL := os.Getenv("REDIS_URL")
-	if redisURL == "" {
-		panic("REDIS_URL não está definida no ambiente!")
-	}
-
 	store := storage.NewRedisStorage()
+
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{
+			"message": "URL Shortener API",
+			"version": "1.0.0",
+		})
+	})
 
 	app.Post("/encurtar", handlers.ShortenHandler(store))
 	app.Get("/:slug", handlers.RedirectHandler(store))
