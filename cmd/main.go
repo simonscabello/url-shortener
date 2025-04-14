@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"url-shortener/internal/handlers"
 	"url-shortener/internal/storage"
 
@@ -9,6 +11,13 @@ import (
 
 func main() {
 	app := fiber.New()
+
+	redisURL := os.Getenv("REDIS_URL")
+	if redisURL == "" {
+		panic("REDIS_URL não está definida no ambiente!")
+	}
+
+	fmt.Println("REDIS_URL:", redisURL)
 
 	store := storage.NewRedisStorage()
 
