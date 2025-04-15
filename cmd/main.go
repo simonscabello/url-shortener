@@ -12,12 +12,7 @@ func main() {
 
 	store := storage.NewRedisStorage()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"message": "URL Shortener API",
-			"version": "1.0.0",
-		})
-	})
+	app.Get("/", handlers.HelloHandler())
 
 	app.Post("/encurtar", handlers.ShortenHandler(store))
 	app.Get("/:slug", handlers.RedirectHandler(store))
