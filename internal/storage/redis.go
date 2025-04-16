@@ -11,6 +11,8 @@ import (
 type Storage interface {
 	Save(slug, url string, ttl time.Duration)
 	Get(slug string) (string, bool)
+	IncrementClicks(slug string)
+	GetClicks(slug string) int
 }
 
 type RedisStorage struct {
@@ -34,7 +36,10 @@ func NewRedisStorage() *RedisStorage {
 }
 
 func (r *RedisStorage) Save(slug, url string, ttl time.Duration) {
-	r.client.Set(r.ctx, slug, url, ttl)
+	err := r.client.Set(r.ctx, slug, url, ttl).Err()
+	if err != nil {
+		panic("Erro ao salvar slug no Redis: " + err.Error())
+	}
 }
 
 func (r *RedisStorage) Get(slug string) (string, bool) {
@@ -43,4 +48,16 @@ func (r *RedisStorage) Get(slug string) (string, bool) {
 		return "", false
 	}
 	return val, true
+}
+
+func (r *RedisStorage) IncrementClicks(slug string) {
+	r.client.Incr(r.ctx, slug+":clicks")
+}
+
+func (r *RedisStorage) GetClicks(slug string) int {
+	val, err := r.client.Get(r.ctx, slug+":clicks").Int()
+	if err != nil {
+		return 0
+	}
+	return val
 }

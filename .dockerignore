@@ -1,0 +1,33 @@
+# Ignora o controle de versão
+.git
+.gitignore
+
+# Ignora dependências desnecessárias
+node_modules
+vendor
+
+# Arquivos de configuração locais
+.env
+.env.*
+
+# Cache do Go
+*.test
+*.out
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Diretórios temporários
+tmp/
+bin/
+dist/
+
+# Docker em si
+Dockerfile
+docker-compose.yml
+
+# IDEs
+.vscode/
+.idea/
+*.swp

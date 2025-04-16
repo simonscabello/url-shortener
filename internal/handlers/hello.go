@@ -9,7 +9,7 @@ func HelloHandler() fiber.Handler {
 		return c.JSON(fiber.Map{
 			"message": "URL Shortener API",
 			"version": "1.0.0",
-			"author":  "Simon",
+			"author":  "Simon Scabello",
 		})
 	}
 }
