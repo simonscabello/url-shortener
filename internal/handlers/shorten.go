@@ -5,6 +5,8 @@ import (
 	"url-shortener/internal/storage"
 	"url-shortener/internal/utils"
 
+	"strings"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
@@ -28,6 +30,10 @@ func ShortenHandler(store storage.Storage) fiber.Handler {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error": "Erro ao ler corpo da requisição",
 			})
+		}
+
+		if !strings.HasPrefix(body.URL, "http://") && !strings.HasPrefix(body.URL, "https://") {
+			body.URL = "https://" + body.URL
 		}
 
 		if err := validate.Struct(body); err != nil {
