@@ -7,7 +7,6 @@ import (
 
 	"strings"
 
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -19,8 +18,6 @@ type request struct {
 type ShortenResponse struct {
 	ShortURL string `json:"short_url"`
 }
-
-var validate = validator.New()
 
 func ShortenHandler(store storage.Storage) fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -36,7 +33,7 @@ func ShortenHandler(store storage.Storage) fiber.Handler {
 			body.URL = "https://" + body.URL
 		}
 
-		if err := validate.Struct(body); err != nil {
+		if !utils.IsValidURL(body.URL) {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error": "URL inválida",
 			})
